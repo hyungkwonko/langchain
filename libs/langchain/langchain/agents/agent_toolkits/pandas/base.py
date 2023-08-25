@@ -115,11 +115,11 @@ def _get_prompt_and_tools(
     input_variables: Optional[List[str]] = None,
     include_df_in_prompt: Optional[bool] = True,
     number_of_head_rows: int = 5,
+    number_max_display: int = 60,
 ) -> Tuple[BasePromptTemplate, List[PythonAstREPLTool]]:
     try:
         import pandas as pd
-
-        pd.set_option("display.max_columns", None)
+        pd.options.display.max_rows = number_max_display
     except ImportError:
         raise ImportError(
             "pandas package not found, please install with `pip install pandas`"
@@ -226,11 +226,11 @@ def _get_functions_prompt_and_tools(
     input_variables: Optional[List[str]] = None,
     include_df_in_prompt: Optional[bool] = True,
     number_of_head_rows: int = 5,
+    number_max_display: int = 60,
 ) -> Tuple[BasePromptTemplate, List[PythonAstREPLTool]]:
     try:
         import pandas as pd
-
-        pd.set_option("display.max_columns", None)
+        pd.options.display.max_rows = number_max_display
     except ImportError:
         raise ImportError(
             "pandas package not found, please install with `pip install pandas`"
@@ -280,6 +280,7 @@ def create_pandas_dataframe_agent(
     agent_executor_kwargs: Optional[Dict[str, Any]] = None,
     include_df_in_prompt: Optional[bool] = True,
     number_of_head_rows: int = 5,
+    number_max_display: int = 60,
     **kwargs: Dict[str, Any],
 ) -> AgentExecutor:
     """Construct a pandas agent from an LLM and dataframe."""
@@ -292,6 +293,7 @@ def create_pandas_dataframe_agent(
             input_variables=input_variables,
             include_df_in_prompt=include_df_in_prompt,
             number_of_head_rows=number_of_head_rows,
+            number_max_display=number_max_display,
         )
         llm_chain = LLMChain(
             llm=llm,
@@ -313,6 +315,7 @@ def create_pandas_dataframe_agent(
             input_variables=input_variables,
             include_df_in_prompt=include_df_in_prompt,
             number_of_head_rows=number_of_head_rows,
+            number_max_display=number_max_display,
         )
         agent = OpenAIFunctionsAgent(
             llm=llm,
